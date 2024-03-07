@@ -1,0 +1,17 @@
+[
+    {
+        "name": "AI chat bot",
+        "distance": 0.2,
+        "angle": 70
+    },
+    {
+        "name": "Jespperino",
+        "distance": 0.5,
+        "angle": 110
+    },
+    {
+        "name": "Jeppson",
+        "distance": 0.5,
+        "angle": 250
+    }
+]
