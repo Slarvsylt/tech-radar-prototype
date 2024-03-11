@@ -2,16 +2,31 @@
     {
         "name": "AI chat bot",
         "distance": 0.2,
-        "angle": 70
+        "angle": 70,
+        "description" : "AI is here, AI is there"
     },
     {
         "name": "Jespperino",
         "distance": 0.5,
-        "angle": 110
+        "angle": 110,
+        "description" : "Jespperino is the award-winning one-man act of the decade!"
     },
     {
         "name": "Jeppson",
         "distance": 0.5,
-        "angle": 250
+        "angle": 250,
+        "description" : "Jeppson premiered in 1997 to mostly positive audience reactions."
+    },
+    {
+        "name": "Jeeper",
+        "distance": 0.8,
+        "angle": 340,
+        "description" : "Once a small boy, Jeeper is now a small man."
+    },
+    {
+        "name": "VR",
+        "distance": 0.6,
+        "angle": 45,
+        "description" : "VR will probably be used in some capacity somtime, maybe."
     }
 ]
