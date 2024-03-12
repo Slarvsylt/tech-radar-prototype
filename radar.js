@@ -48,18 +48,20 @@ function draw() {
     let black = color(11, 11, 38);// Knowit Black
     ellipseMode(CENTER);
     fill(255, 255, 255, 100); // White color with 0 alpha (completely transparent)
-    background(11, 11, 38);
+    background(purple);
 
     radialGradient(
         width/2, height/2, 0,//Start pX, pY, start circle radius
-        width/2, height/2, 400,//End pX, pY, End circle radius
+        width/2, height/2, 500,//End pX, pY, End circle radius
         // width/2-40, height/2-120, 0,//Start pX, pY, start circle radius
         // width/2-40, height/2-120, 380,//End pX, pY, End circle radius
         // #DBEEDE
-        color(purple, 100),
-        color(black, 90), 
+        color(lightPurple, 100),
+        color(purple, 100), 
         
     );
+    stroke(purple);
+    strokeWeight(1);
     ellipse(centerX, centerY, scalar * radiusFarOuter * 2, scalar * radiusFarOuter * 2);
     
     // Draw outer radar background lines
@@ -77,8 +79,9 @@ function draw() {
 
     /////////////////////////////
     ////DRAW TEXT IN A CIRCLE////
-    /////////////////////////////
-    let areas = ['Connectivity', 'Experience', 'Solutions', 'Insight'];
+    ///////////////////////////// 
+    // 'ytivitcennoC', 'ecneirepxE'
+    let areas = ['ytivitcennoC', 'ecneirepxE', 'Solutions', 'Insight'];
     let currentStartAngle = startAngle;
     push();
     translate(width/2, height/2);  
@@ -86,14 +89,18 @@ function draw() {
     //for(var str in areas){
       let str = areas[s];
       let angleBetweenLetters = radians(distanceAngle-50) / str.length;
-      rotate(radians(startAngle + 90*s));
+      rotate(radians(distanceAngle));
       push();
       rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/2))));
       for (let j=0; j<str.length; j++){
         push();
         rotate(j * angleBetweenLetters);   // rotate to angle
         translate(0,-scalar * radiusOuter - 30);              // and translate to edge of circle
-        fill(255);
+        if(s < 2){
+          translate(0,-20);   
+          rotate(radians(180));  
+        }
+        fill(black);
         noStroke();
         textSize(radius/8);
         text(str[j], 0,0);                 // draw character at location
@@ -107,9 +114,7 @@ function draw() {
     /////////////////////////////
     /////////////////////////////
     textSize(15);
-    fill(20);
-    stroke(255);
-    strokeWeight(2);
+    noStroke();
     textAlign(CENTER);
     textStyle(NORMAL);
     
@@ -117,13 +122,13 @@ function draw() {
     // Run through the data points
     for (let i = 0; i < dataPoints.length; i++) {
         // Draw the data points
-        dataPoints[i].drawDataPoint();
+
         // Check if mouse is over the data point,
         // if true, display the data point info
         // if mouse is clicked, open the url of the data point
         if(dataPoints[i].isMouseOver()){
           push();
-            fill(white, 100);
+            fill(blue, 100);
             //stroke(0, 0, 0, 100);
             strokeWeight(4);
             
@@ -131,7 +136,7 @@ function draw() {
             textSize(15);
             textStyle(NORMAL);
             rect(mouseX + 15, mouseY + 15, textWidth(dataPoints[i].description) + 20, 24, 4);
-            fill(black, 100);
+            fill(white, 100);
             text(dataPoints[i].description, mouseX+20, mouseY+20);
             //stroke(255);
             //strokeWeight(2);
@@ -141,6 +146,7 @@ function draw() {
                 window.open(dataPoints[i].url, '_blank');
             }
         }
+        dataPoints[i].drawDataPoint();
     }
 
 }
@@ -158,8 +164,8 @@ function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
   function shadow(){
     drawingContext.shadowOffsetX = 0;
     drawingContext.shadowOffsetY = 0;
-    drawingContext.shadowBlur = 0;
-    drawingContext.shadowColor = color(230, 30, 18, 100);
+    drawingContext.shadowBlur = 1;
+    drawingContext.shadowColor = black;
     // drawingContext.shadowColor = color(0,0,0, 100);
   }
 
@@ -181,9 +187,10 @@ class DataPoint {
     drawDataPoint(){
         var x = this.centerX + cos(radians(this.angle)) * this.scalar * this.distance;
         var y = this.centerY + sin(radians(this.angle)) * this.scalar * this.distance;
-        fill(100, 100, 0, 100); // White color with 0 alpha (completely transparent)
+        fill(55, 43, 197);
+        //fill(11, 11, 38); // White color with 0 alpha (completely transparent)
         ellipse(x, y, this.dataPointRadius, this.dataPointRadius);
-        fill(20);
+        textStyle(BOLD);
         text(this.name, x + this.textXOffset, y + this.textYOffset);
     }
     // Check if mouse is over the data point
