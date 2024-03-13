@@ -7,6 +7,9 @@ let startAngle =    0;     // angle where text should start
 let distanceAngle = 90;   // how far (in degrees) text will go
 let radius;                // set dynamically in setup()
 
+let bg; //Background image
+let cimg; //Circle Image!
+
 function preload(){
   // Read the input from the file data.json
   data = loadJSON('data.json');
@@ -16,6 +19,8 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     radius = min(width,height) / 3;
     //createCanvas(sizeX, sizeY);
+    //bg = loadImage('Evening-Sky.jpg');
+    //cimg = loadImage('Twilight-Sky.jpg');
     
     smooth();
     
@@ -47,10 +52,23 @@ function draw() {
     let blue = color(55, 43, 197);// Blue
     let black = color(11, 11, 38);// Knowit Black
     ellipseMode(CENTER);
-    fill(255, 255, 255, 100); // White color with 0 alpha (completely transparent)
-    background(purple);
-
-    radialGradient(
+    fill(255, 255, 255, 0); // White color with 0 alpha (completely transparent)
+    c1 = color(24,87,182);
+    c2 = color(pink);
+    
+    for(let y=0; y<height; y++){
+      n = map(y,0,height,0,1);
+      let newc = lerpColor(c1,c2,n);
+      stroke(newc);
+      line(0,y,width, y);
+    }
+    //background(bg);
+    tint(255,255);
+    //let shape = createGraphics(width, height);
+    //shape.circle(width/2, height/2, 800);
+    //cimg.mask(shape);
+    //image(cimg,0,0,width,height);
+   /* radialGradient(
         width/2, height/2, 0,//Start pX, pY, start circle radius
         width/2, height/2, 500,//End pX, pY, End circle radius
         // width/2-40, height/2-120, 0,//Start pX, pY, start circle radius
@@ -59,9 +77,9 @@ function draw() {
         color(lightPurple, 100),
         color(purple, 100), 
         
-    );
-    stroke(purple);
-    strokeWeight(1);
+    );*/
+    stroke(white);
+    strokeWeight(3);
     ellipse(centerX, centerY, scalar * radiusFarOuter * 2, scalar * radiusFarOuter * 2);
     
     // Draw outer radar background lines
@@ -71,14 +89,14 @@ function draw() {
     // Draw inner radar background lines
     ellipse(centerX, centerY, scalar * radiusInner * 2, scalar * radiusInner * 2);
     // Draw radar horizontal line
-    line(0, centerY, width, centerY);
+    line(width/2 - scalar * radiusFarOuter, centerY, width/2+scalar * radiusFarOuter, centerY);
     // Draw radar vertical line
-    line(centerX, 0, centerX, height);
+    line(centerX, height/2 - scalar * radiusFarOuter, centerX, height/2 + scalar * radiusFarOuter);
 
-    stroke(0,150,255);
+    //stroke(0,150,255);
 
     /////////////////////////////
-    ////DRAW TEXT IN A CIRCLE////
+    ////DRAW TEXT IN A CIRCLE, ugly as fuck////
     ///////////////////////////// 
     // 'ytivitcennoC', 'ecneirepxE'
     let areas = ['ytivitcennoC', 'ecneirepxE', 'Solutions', 'Insight'];
@@ -100,7 +118,7 @@ function draw() {
           translate(0,-20);   
           rotate(radians(180));  
         }
-        fill(black);
+        fill(white);
         noStroke();
         textSize(radius/8);
         text(str[j], 0,0);                 // draw character at location
@@ -131,13 +149,16 @@ function draw() {
             fill(blue, 100);
             //stroke(0, 0, 0, 100);
             strokeWeight(4);
-            
+            shadow();
             textAlign(LEFT, TOP);
             textSize(15);
             textStyle(NORMAL);
-            rect(mouseX + 15, mouseY + 15, textWidth(dataPoints[i].description) + 20, 24, 4);
+            textWrap(WORD);
+            //rect(mouseX + 15, mouseY + 15, textWidth(dataPoints[i].description) + 20, 24, 4);
+            let maxHeight = textHeight(dataPoints[i].description,200);
+            rect(mouseX + 15, mouseY + 13, 200 + 20, maxHeight+10, 4);
             fill(white, 100);
-            text(dataPoints[i].description, mouseX+20, mouseY+20);
+            text(dataPoints[i].description, mouseX+20, mouseY+20, 200);
             //stroke(255);
             //strokeWeight(2);
           pop();
@@ -159,15 +180,34 @@ function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
     gradient.addColorStop(1, colorE);
   
     drawingContext.fillStyle = gradient;
-  }
+}
   
   function shadow(){
-    drawingContext.shadowOffsetX = 0;
-    drawingContext.shadowOffsetY = 0;
-    drawingContext.shadowBlur = 1;
-    drawingContext.shadowColor = black;
-    // drawingContext.shadowColor = color(0,0,0, 100);
+    drawingContext.shadowOffsetX = 1;
+    drawingContext.shadowOffsetY = 1;
+    drawingContext.shadowBlur = 2;
+    drawingContext.shadowColor = 'black';
+}
+
+function textHeight(text, maxWidth) {
+  var words = text.split(' ');
+  var line = '';
+  var h = textLeading();
+
+  for (var i = 0; i < words.length; i++) {
+      var testLine = line + words[i] + ' ';
+      var testWidth = drawingContext.measureText(testLine).width;
+
+      if (testWidth > maxWidth && i > 0) {
+          line = words[i] + ' ';
+          h += textLeading();
+      } else {
+          line = testLine;
+      }
   }
+
+  return h;
+}
 
 class DataPoint {
     constructor(angle, distance, name, url, centerX, centerY, scalar, description) {
@@ -185,13 +225,16 @@ class DataPoint {
     };
     // Draw the data point
     drawDataPoint(){
+      push();
+        shadow();
         var x = this.centerX + cos(radians(this.angle)) * this.scalar * this.distance;
         var y = this.centerY + sin(radians(this.angle)) * this.scalar * this.distance;
-        fill(55, 43, 197);
-        //fill(11, 11, 38); // White color with 0 alpha (completely transparent)
+        fill(254, 251, 230)
+        //fill(55, 43, 197);
         ellipse(x, y, this.dataPointRadius, this.dataPointRadius);
         textStyle(BOLD);
         text(this.name, x + this.textXOffset, y + this.textYOffset);
+      pop();
     }
     // Check if mouse is over the data point
     isMouseOver(){
