@@ -33,7 +33,7 @@ function setup() {
 
     // Make an array of all the data points contained in the global variable data
     for (var member in data) {
-        dataPoints.push(new DataPoint(data[member].angle, data[member].distance, data[member].name, data[member].url, width / 2, height / 2 + height / 4, 300, data[member].description));
+        dataPoints.push(new DataPoint(data[member].angle, data[member].distance, data[member].name, data[member].url, width / 2, height / 2 + height / 4, 390, data[member].description));
     }
   }
   
@@ -41,7 +41,7 @@ function draw() {
     // Constant values
     const centerX = width / 2;
     const centerY = height / 2; 
-    const scalar = 370;
+    const scalar = 390;
     // Radar background lines circles
     const radiusInner = 1/3;
     const radiusMiddle = 2/3;
@@ -55,7 +55,7 @@ function draw() {
     let white = color(254, 251, 230); // Knowit White
     let pink = color(255, 214, 184);// Pink
     let lightPink = color(255, 235, 221);// Light pink
-    let purple = color(207, 206, ); //Purple
+    let purple = color(207, 206, 255); //Purple
     let lightPurple = color(247, 246, 255); //Light Purple
     let blue = color(55, 43, 197);// Blue
     let black = color(11, 11, 38);// Knowit Black
@@ -75,14 +75,14 @@ function draw() {
     }
     ////////////////////////////
 
-    /* radialGradient(
+   /* radialGradient(
         width/2, height/2, 0,//Start pX, pY, start circle radius
         width/2, height/2, 500,//End pX, pY, End circle radius
         // width/2-40, height/2-120, 0,//Start pX, pY, start circle radius
         // width/2-40, height/2-120, 380,//End pX, pY, End circle radius
         // #DBEEDE
-        color(lightPurple, 100),
-        color(purple, 100), 
+        color(black, 100),
+        color(blue, 100), 
         
     );*/
 
@@ -221,9 +221,9 @@ function draw() {
 
 function waveText(radius){
   str = 'Knowit Tech Radar';
-  fontSize = 45;        //30-90
-  tracking = 30;        //30-120
-  yWaveSize = 20;      //30-180
+  fontSize = 95;        //30-90
+  tracking = 20;        //30-120
+  yWaveSize = 10;      //30-180
   yWaveLength = 100;  //30-210
   yWaveSpeed = 0.05;    //30-240
   push();
@@ -231,8 +231,8 @@ function waveText(radius){
   textAlign(CENTER);
   // Center matrix
   translate(width/2, height/2 - radius);
-  let angleBetweenLetters = 4;
-  rotate(radians(-str.length * angleBetweenLetters / 2.3))
+  let angleBetweenLetters = 5;
+  rotate(radians(-str.length * angleBetweenLetters / 2.2))
   //rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/5))));
   // Reposition  matrix depending on width & height of the grid
   //translate(-(str.length-1)*tracking/2,0);
@@ -241,9 +241,14 @@ function waveText(radius){
     yWave = sin(frameCount*yWaveSpeed + i*yWaveLength) * yWaveSize;
     //rotate(i * angleBetweenLetters);   // rotate to angle
     fill(254, 251, 230);
-    shadow();
+    //shadow();
     //translate(i*tracking,0);
-    text(str.charAt(i),0,yWave+radius*2.1);
+    fill(55, 43, 197);
+    text(str.charAt(i),5,yWave+radius*2.2+5);
+    fill(0,0,0);
+    text(str.charAt(i),3,yWave+radius*2.2+3);
+    fill(254, 251, 230);
+    text(str.charAt(i),0,yWave+radius*2.2);
     rotate(radians(angleBetweenLetters));
   }
   pop();
