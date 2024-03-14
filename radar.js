@@ -208,10 +208,18 @@ function draw() {
           }
       }
     }
-    waveText();
+    //////FPS///////
+    push();
+    let fps = frameRate();
+    fill(255);
+    stroke(0);
+    text("FPS: " + fps.toFixed(2), 100, 100);
+    pop();
+    ////////////////
+    waveText(centerY/2 - scalar * radiusFarOuter);
 }
 
-function waveText(){
+function waveText(radius){
   str = 'Knowit Tech Radar';
   fontSize = 45;        //30-90
   tracking = 30;        //30-120
@@ -222,18 +230,21 @@ function waveText(){
   textSize(fontSize);
   textAlign(CENTER);
   // Center matrix
-  translate(width/2, height/2 - height/2.7);
-
+  translate(width/2, height/2 - radius);
+  let angleBetweenLetters = 4;
+  rotate(radians(-str.length * angleBetweenLetters / 2.3))
+  //rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/5))));
   // Reposition  matrix depending on width & height of the grid
-  translate(-(str.length-1)*tracking/2,0);
+  //translate(-(str.length-1)*tracking/2,0);
   for(var i = 0; i < str.length; i++){
+
     yWave = sin(frameCount*yWaveSpeed + i*yWaveLength) * yWaveSize;
-    
-    fill(255);
-    push();
-      translate(i*tracking,0);
-      text(str.charAt(i),0,yWave);
-    pop();
+    //rotate(i * angleBetweenLetters);   // rotate to angle
+    fill(254, 251, 230);
+    shadow();
+    //translate(i*tracking,0);
+    text(str.charAt(i),0,yWave+radius*2.1);
+    rotate(radians(angleBetweenLetters));
   }
   pop();
 }
@@ -248,7 +259,7 @@ function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
     drawingContext.fillStyle = gradient;
 }
   
-  function shadow(){
+function shadow(){
     drawingContext.shadowOffsetX = 2;
     drawingContext.shadowOffsetY = 2;
     drawingContext.shadowBlur = 3;
