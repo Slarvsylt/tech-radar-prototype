@@ -19,22 +19,29 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     radius = min(width,height) / 3;
     //createCanvas(sizeX, sizeY);
-    //bg = loadImage('Evening-Sky.jpg');
-    //cimg = loadImage('Twilight-Sky.jpg');
-    
+    //bg = loadImage('Evening-Sky.jpg');          //Background image stuff. Big hit to performance
+    //cimg = loadImage('Twilight-Sky.jpg');     
     smooth();
-    
+    inputName = createInput();
+    inputName.position(250, height / 2 + height / 3);
+    inputDesc = createInput();
+    inputDesc.position(250, height / 2 + height / 2.7);
+    let button = createButton('Add Data');
+    button.position(90, height / 2 + height / 3);
+    button.mousePressed(() => {
+    });
+
     // Make an array of all the data points contained in the global variable data
     for (var member in data) {
-        dataPoints.push(new DataPoint(data[member].angle, data[member].distance, data[member].name, data[member].url, width / 2, height / 2, 300, data[member].description));
+        dataPoints.push(new DataPoint(data[member].angle, data[member].distance, data[member].name, data[member].url, width / 2, height / 2 + height / 4, 300, data[member].description));
     }
   }
   
 function draw() {
     // Constant values
     const centerX = width / 2;
-    const centerY = height / 2;
-    const scalar = 300;
+    const centerY = height / 2; 
+    const scalar = 370;
     // Radar background lines circles
     const radiusInner = 1/3;
     const radiusMiddle = 2/3;
@@ -43,32 +50,32 @@ function draw() {
     // Radius of the data points dots that represent the specific tech in the radar
     const dataPointRadius = 12;
 
+    //////Knowit Colors////////
     let green = color(85, 212, 64); // Green
     let white = color(254, 251, 230); // Knowit White
     let pink = color(255, 214, 184);// Pink
     let lightPink = color(255, 235, 221);// Light pink
-    let purple = color(207, 206, 255); //Purple
+    let purple = color(207, 206, ); //Purple
     let lightPurple = color(247, 246, 255); //Light Purple
     let blue = color(55, 43, 197);// Blue
     let black = color(11, 11, 38);// Knowit Black
+    ///////////////////////////
+
     ellipseMode(CENTER);
     fill(255, 255, 255, 0); // White color with 0 alpha (completely transparent)
     c1 = color(24,87,182);
     c2 = color(pink);
     
+    /////Background Gradient!////
     for(let y=0; y<height; y++){
       n = map(y,0,height,0,1);
       let newc = lerpColor(c1,c2,n);
       stroke(newc);
       line(0,y,width, y);
     }
-    //background(bg);
-    tint(255,255);
-    //let shape = createGraphics(width, height);
-    //shape.circle(width/2, height/2, 800);
-    //cimg.mask(shape);
-    //image(cimg,0,0,width,height);
-   /* radialGradient(
+    ////////////////////////////
+
+    /* radialGradient(
         width/2, height/2, 0,//Start pX, pY, start circle radius
         width/2, height/2, 500,//End pX, pY, End circle radius
         // width/2-40, height/2-120, 0,//Start pX, pY, start circle radius
@@ -78,39 +85,73 @@ function draw() {
         color(purple, 100), 
         
     );*/
+
     stroke(white);
     strokeWeight(3);
-    ellipse(centerX, centerY, scalar * radiusFarOuter * 2, scalar * radiusFarOuter * 2);
     
-    // Draw outer radar background lines
-    ellipse(centerX, centerY, scalar * radiusOuter * 2, scalar * radiusOuter * 2);
-    // Draw middle radar background lines
-    ellipse(centerX, centerY, scalar * radiusMiddle * 2, scalar * radiusMiddle * 2);
-    // Draw inner radar background lines
-    ellipse(centerX, centerY, scalar * radiusInner * 2, scalar * radiusInner * 2);
-    // Draw radar horizontal line
-    line(width/2 - scalar * radiusFarOuter, centerY, width/2+scalar * radiusFarOuter, centerY);
+    arc(centerX, centerY + centerY/2, scalar * radiusFarOuter * 2, scalar * radiusFarOuter * 2, radians(180), 2*PI, PIE);
+    arc(centerX, centerY + centerY/2, scalar * radiusOuter * 2, scalar * radiusOuter * 2, radians(180), 2*PI, PIE);
+    arc(centerX, centerY + centerY/2, scalar * radiusMiddle * 2, scalar * radiusMiddle * 2, radians(180), 2*PI, PIE);
+    arc(centerX, centerY + centerY/2, scalar * radiusInner * 2, scalar * radiusInner * 2, radians(180), 2*PI, PIE);
+    line(width/2 - scalar * radiusFarOuter, centerY + centerY/2, width/2+scalar * radiusFarOuter, centerY + centerY/2);
     // Draw radar vertical line
-    line(centerX, height/2 - scalar * radiusFarOuter, centerX, height/2 + scalar * radiusFarOuter);
+    line(centerX, centerY + centerY/2 - scalar * radiusFarOuter, centerX, centerY + centerY/2);
 
     //stroke(0,150,255);
 
-    /////////////////////////////
-    ////DRAW TEXT IN A CIRCLE, ugly as fuck////
-    ///////////////////////////// 
+    /////////////////////////////////////////////
+    ////DRAW TEXT IN A CIRCLE, ugly as fuck/////
+    ///////////////////////////////////////////
     // 'ytivitcennoC', 'ecneirepxE'
-    let areas = ['ytivitcennoC', 'ecneirepxE', 'Solutions', 'Insight'];
-    let currentStartAngle = startAngle;
+    //let areas = ['ytivitcennoC', 'ecneirepxE', 'Solutions', 'Insight'];
+    let areas = ['', '', 'Social & Business', 'Technologies'];
     push();
-    translate(width/2, height/2);  
-    for(let s=0; s<areas.length; s++){
+    translate(width/2, centerY + centerY/2);  
+
+    let str = areas[2];
+    let angleBetweenLetters = radians(distanceAngle) / (str.length*1.5);
+    rotate(radians(0));
+    
+    rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/5))));
+    for (let j=0; j<str.length; j++){
+      push();
+      rotate(j * angleBetweenLetters);   // rotate to angle
+      translate(0,-scalar * radiusOuter - 30);              // and translate to edge of circle
+      fill(white);
+      noStroke();
+      textSize(radius/8);
+      text(str[j], 0,0);                 // draw character at location
+      pop();
+    }
+    pop();
+    push();
+    translate(width/2, centerY + centerY/2);  
+
+    str = areas[3];
+    angleBetweenLetters = radians(distanceAngle) / (str.length*1.5);
+    rotate(radians(280));
+    
+    rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/5))));
+    for (let j=0; j<str.length; j++){
+      push();
+      rotate(j * angleBetweenLetters);   // rotate to angle
+      translate(0,-scalar * radiusOuter - 30);              // and translate to edge of circle
+      fill(white);
+      noStroke();
+      textSize(radius/8);
+      text(str[j], 0,0);                 // draw character at location
+      pop();
+    }
+    pop();
+   /* for(let s=0; s<areas.length; s++){
     //for(var str in areas){
       let str = areas[s];
-      let angleBetweenLetters = radians(distanceAngle-50) / str.length;
+      let angleBetweenLetters = radians(distanceAngle) / (str.length*1.5);
       rotate(radians(distanceAngle));
-      push();
-      rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/2))));
+      
+      rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/5))));
       for (let j=0; j<str.length; j++){
+        if(s < 2)continue;
         push();
         rotate(j * angleBetweenLetters);   // rotate to angle
         translate(0,-scalar * radiusOuter - 30);              // and translate to edge of circle
@@ -124,13 +165,12 @@ function draw() {
         text(str[j], 0,0);                 // draw character at location
         pop();
       }
-      pop();
+      
       currentStartAngle += distanceAngle;
-    }
-    pop();
-    /////////////////////////////
-    /////////////////////////////
-    /////////////////////////////
+    }*/
+    ////////////////////////////////
+    ///////////////////////////////
+    //////////////////////////////
     textSize(15);
     noStroke();
     textAlign(CENTER);
@@ -140,36 +180,62 @@ function draw() {
     // Run through the data points
     for (let i = 0; i < dataPoints.length; i++) {
         // Draw the data points
-
-        // Check if mouse is over the data point,
-        // if true, display the data point info
-        // if mouse is clicked, open the url of the data point
-        if(dataPoints[i].isMouseOver()){
-          push();
-            fill(blue, 100);
-            //stroke(0, 0, 0, 100);
-            strokeWeight(4);
-            shadow();
-            textAlign(LEFT, TOP);
-            textSize(15);
-            textStyle(NORMAL);
-            textWrap(WORD);
-            //rect(mouseX + 15, mouseY + 15, textWidth(dataPoints[i].description) + 20, 24, 4);
-            let maxHeight = textHeight(dataPoints[i].description,200);
-            rect(mouseX + 15, mouseY + 13, 200 + 20, maxHeight+10, 4);
-            fill(white, 100);
-            text(dataPoints[i].description, mouseX+20, mouseY+20, 200);
-            //stroke(255);
-            //strokeWeight(2);
-          pop();
-
-            if(mouseIsPressed){
-                window.open(dataPoints[i].url, '_blank');
-            }
-        }
         dataPoints[i].drawDataPoint();
     }
+    for (let i = 0; i < dataPoints.length; i++){
+      // Check if mouse is over the data point,
+      // if true, display the data point info
+      // if mouse is clicked, open the url of the data point
+      if(dataPoints[i].isMouseOver()){
+        push();
+          fill(blue, 100);
+          //stroke(0, 0, 0, 100);
+          strokeWeight(4);
+          shadow();
+          textAlign(LEFT, TOP);
+          textSize(15);
+          textStyle(NORMAL);
+          textWrap(WORD);
+          //rect(mouseX + 15, mouseY + 15, textWidth(dataPoints[i].description) + 20, 24, 4);
+          let maxHeight = textHeight(dataPoints[i].description,200);
+          rect(mouseX + 15, mouseY + 13, 200 + 20, maxHeight+10, 4);
+          fill(white, 100);
+          text(dataPoints[i].description, mouseX+20, mouseY+20, 200);
+        pop();
 
+          if(mouseIsPressed){
+              window.open(dataPoints[i].url, '_blank');
+          }
+      }
+    }
+    waveText();
+}
+
+function waveText(){
+  str = 'Knowit Tech Radar';
+  fontSize = 45;        //30-90
+  tracking = 30;        //30-120
+  yWaveSize = 20;      //30-180
+  yWaveLength = 100;  //30-210
+  yWaveSpeed = 0.05;    //30-240
+  push();
+  textSize(fontSize);
+  textAlign(CENTER);
+  // Center matrix
+  translate(width/2, height/2 - height/2.7);
+
+  // Reposition  matrix depending on width & height of the grid
+  translate(-(str.length-1)*tracking/2,0);
+  for(var i = 0; i < str.length; i++){
+    yWave = sin(frameCount*yWaveSpeed + i*yWaveLength) * yWaveSize;
+    
+    fill(255);
+    push();
+      translate(i*tracking,0);
+      text(str.charAt(i),0,yWave);
+    pop();
+  }
+  pop();
 }
 
 function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
@@ -183,9 +249,9 @@ function radialGradient(sX, sY, sR, eX, eY, eR, colorS, colorE){
 }
   
   function shadow(){
-    drawingContext.shadowOffsetX = 1;
-    drawingContext.shadowOffsetY = 1;
-    drawingContext.shadowBlur = 2;
+    drawingContext.shadowOffsetX = 2;
+    drawingContext.shadowOffsetY = 2;
+    drawingContext.shadowBlur = 3;
     drawingContext.shadowColor = 'black';
 }
 

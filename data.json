@@ -2,31 +2,49 @@
     {
         "name": "AI chat bot",
         "distance": 0.2,
-        "angle": 70,
+        "angle": 245,
         "description" : "AI is here, AI is there"
     },
     {
         "name": "Jespperino",
         "distance": 0.5,
-        "angle": 110,
+        "angle": 210,
         "description" : "Jespperino is the award-winning one-man act of the decade!"
     },
     {
         "name": "Jeppson",
         "distance": 0.5,
-        "angle": 250,
+        "angle": 300,
         "description" : "Jeppson premiered in 1997 to mostly positive audience reactions."
+    },
+    {
+        "name": "Web4",
+        "distance": 1.4,
+        "angle": 250,
+        "description" : "Future"
     },
     {
         "name": "Jeeper",
         "distance": 0.8,
-        "angle": 340,
+        "angle": 270,
         "description" : "Once a small boy, Jeeper is now a small man."
     },
     {
         "name": "VR",
         "distance": 0.6,
-        "angle": 45,
-        "description" : "VR will probably be used in some capacity somtime, maybe."
+        "angle": 220,
+        "description" : "VR will probably be used in some capacity somtime, maybe. VR will probably be used in some capacity somtime, maybe. VR will probably be used in some capacity somtime, maybe. VR will probably be used in some capacity somtime, maybe."
+    },
+    {
+        "name": "AR",
+        "distance": 0.7,
+        "angle": 230,
+        "description" : "AR will probably be used in some capacity somtime, maybe."
+    },
+    {
+        "name": "SR",
+        "distance": 0.8,
+        "angle": 200,
+        "description" : "SR will probably be used in some capacity somtime, maybe."
     }
 ]
