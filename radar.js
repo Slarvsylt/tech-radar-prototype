@@ -6,6 +6,7 @@ const sizeY = 800;
 let startAngle =    0;     // angle where text should start
 let distanceAngle = 90;   // how far (in degrees) text will go
 let radius;                // set dynamically in setup()
+const scalar = 390;
 
 let bg; //Background image
 let cimg; //Circle Image!
@@ -31,9 +32,10 @@ function setup() {
     button.mousePressed(() => {
     });
 
+    let r = ((height / 2) + height/4) - (height / 4 - 200 * (4/3));
     // Make an array of all the data points contained in the global variable data
     for (var member in data) {
-        dataPoints.push(new DataPoint(data[member].angle, data[member].distance, data[member].name, data[member].url, width / 2, height / 2 + height / 4, 390, data[member].description));
+        dataPoints.push(new DataPoint(data[member].angle, data[member].distance, data[member].name, data[member].url, width / 2, height / 2 + height / 4, scalar, data[member].description, r));
     }
   }
   
@@ -41,7 +43,7 @@ function draw() {
     // Constant values
     const centerX = width / 2;
     const centerY = height / 2; 
-    const scalar = 390;
+    
     // Radar background lines circles
     const radiusInner = 1/3;
     const radiusMiddle = 2/3;
@@ -89,13 +91,15 @@ function draw() {
     stroke(white);
     strokeWeight(3);
     
-    arc(centerX, centerY + centerY/2, scalar * radiusFarOuter * 2, scalar * radiusFarOuter * 2, radians(180), 2*PI, PIE);
+    //arc(centerX, centerY + centerY/2, scalar * radiusFarOuter * 2, scalar * radiusFarOuter * 2, radians(180), 2*PI, PIE);
     arc(centerX, centerY + centerY/2, scalar * radiusOuter * 2, scalar * radiusOuter * 2, radians(180), 2*PI, PIE);
     arc(centerX, centerY + centerY/2, scalar * radiusMiddle * 2, scalar * radiusMiddle * 2, radians(180), 2*PI, PIE);
     arc(centerX, centerY + centerY/2, scalar * radiusInner * 2, scalar * radiusInner * 2, radians(180), 2*PI, PIE);
-    line(width/2 - scalar * radiusFarOuter, centerY + centerY/2, width/2+scalar * radiusFarOuter, centerY + centerY/2);
+    //line(width/2 - scalar * radiusFarOuter, centerY + centerY/2, width/2+scalar * radiusFarOuter, centerY + centerY/2);
+    line(width/2 - scalar * radiusOuter, centerY + centerY/2, width/2+scalar * radiusOuter, centerY + centerY/2);
     // Draw radar vertical line
-    line(centerX, centerY + centerY/2 - scalar * radiusFarOuter, centerX, centerY + centerY/2);
+    //line(centerX, centerY + centerY/2 - scalar * radiusFarOuter, centerX, centerY + centerY/2);
+    line(centerX, centerY + centerY/2 - scalar * radiusOuter, centerX, centerY + centerY/2);
 
     //stroke(0,150,255);
 
@@ -216,32 +220,30 @@ function draw() {
     text("FPS: " + fps.toFixed(2), 100, 100);
     pop();
     ////////////////
-    waveText(centerY/2 - scalar * radiusFarOuter);
+    waveText(centerY/2 - scalar * radiusOuter - 60);
 }
 
 function waveText(radius){
-  str = 'Knowit Tech Radar';
-  fontSize = 95;        //30-90
-  tracking = 20;        //30-120
-  yWaveSize = 10;      //30-180
-  yWaveLength = 100;  //30-210
-  yWaveSpeed = 0.05;    //30-240
+  str = '★ ☆ Knowit Tech Radar ☆ ★';
+  fontSize = 55;            //30-90
+  tracking = 20;            //30-120
+  yWaveSize = 10;           //30-180
+  yWaveLength = 170;        //30-210
+  yWaveSpeed = 0.05;        //30-240
   push();
   textSize(fontSize);
   textAlign(CENTER);
   // Center matrix
   translate(width/2, height/2 - radius);
-  let angleBetweenLetters = 5;
-  rotate(radians(-str.length * angleBetweenLetters / 2.2))
+  let angleBetweenLetters = 3;
+  rotate(radians(-str.length * angleBetweenLetters / 2.06))
   //rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/5))));
   // Reposition  matrix depending on width & height of the grid
   //translate(-(str.length-1)*tracking/2,0);
   for(var i = 0; i < str.length; i++){
 
     yWave = sin(frameCount*yWaveSpeed + i*yWaveLength) * yWaveSize;
-    //rotate(i * angleBetweenLetters);   // rotate to angle
     fill(254, 251, 230);
-    //shadow();
     //translate(i*tracking,0);
     fill(55, 43, 197);
     text(str.charAt(i),5,yWave+radius*2.2+5);
@@ -292,7 +294,7 @@ function textHeight(text, maxWidth) {
 }
 
 class DataPoint {
-    constructor(angle, distance, name, url, centerX, centerY, scalar, description) {
+    constructor(angle, distance, name, url, centerX, centerY, scalar, description, radius) {
         this.angle = angle;
         this.distance = distance;
         this.name = name;
@@ -304,11 +306,13 @@ class DataPoint {
         this.textYOffset = -10;
         this.scalar = scalar;
         this.description = description;
+        this.radius = radius;
     };
     // Draw the data point
     drawDataPoint(){
       push();
         shadow();
+        Math.max()
         var x = this.centerX + cos(radians(this.angle)) * this.scalar * this.distance;
         var y = this.centerY + sin(radians(this.angle)) * this.scalar * this.distance;
         fill(254, 251, 230)
