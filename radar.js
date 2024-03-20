@@ -1,14 +1,12 @@
 let data;
 let dataPoints = [];
-const sizeX = 800;
-const sizeY = 800;
 
-let startAngle =    0;     // angle where text should start
-let distanceAngle = 90;   // how far (in degrees) text will go
+let startAngle =    0;       // angle where text should start
+let distanceAngle = 90;     // how far (in degrees) text will go
 let radius;                // set dynamically in setup()
 const scalar = 390;
 
-let bg; //Background image
+let bg;   //Background image
 let cimg; //Circle Image!
 
 function preload(){
@@ -23,16 +21,20 @@ function setup() {
     //bg = loadImage('Evening-Sky.jpg');          //Background image stuff. Big hit to performance
     //cimg = loadImage('Twilight-Sky.jpg');     
     smooth();
-    inputName = createInput();
+    c1 = color(24,87,182);
+    c2 = color(255, 214, 184);
+    
+    /////Background Gradient!////
+/*  inputName = createInput();
     inputName.position(250, height / 2 + height / 3);
     inputDesc = createInput();
     inputDesc.position(250, height / 2 + height / 2.7);
     let button = createButton('Add Data');
     button.position(90, height / 2 + height / 3);
     button.mousePressed(() => {
-    });
+    }); */
 
-    let r = ((height / 2) + height/4) - (height / 4 - 200 * (4/3));
+    let r = ((height / 2) + height/4) - (height / 3);
     // Make an array of all the data points contained in the global variable data
     for (var member in data) {
         dataPoints.push(new DataPoint(data[member].angle, data[member].distance, data[member].name, data[member].url, width / 2, height / 2 + height / 4, scalar, data[member].description, r));
@@ -65,17 +67,8 @@ function draw() {
 
     ellipseMode(CENTER);
     fill(255, 255, 255, 0); // White color with 0 alpha (completely transparent)
-    c1 = color(24,87,182);
-    c2 = color(pink);
-    
-    /////Background Gradient!////
-    for(let y=0; y<height; y++){
-      n = map(y,0,height,0,1);
-      let newc = lerpColor(c1,c2,n);
-      stroke(newc);
-      line(0,y,width, y);
-    }
-    ////////////////////////////
+    drawBackground();
+    ////////////////////
 
    /* radialGradient(
         width/2, height/2, 0,//Start pX, pY, start circle radius
@@ -119,12 +112,12 @@ function draw() {
     rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/5))));
     for (let j=0; j<str.length; j++){
       push();
-      rotate(j * angleBetweenLetters);   // rotate to angle
+      rotate(j * angleBetweenLetters);                      // rotate to angle
       translate(0,-scalar * radiusOuter - 30);              // and translate to edge of circle
       fill(white);
       noStroke();
       textSize(radius/8);
-      text(str[j], 0,0);                 // draw character at location
+      text(str[j], 0,0);                                    // draw character at location
       pop();
     }
     pop();
@@ -238,7 +231,7 @@ function waveText(radius){
   let angleBetweenLetters = 3;
   rotate(radians(-str.length * angleBetweenLetters / 2.06))
   //rotate(radians((distanceAngle*0.5) - (distanceAngle/(str.length/5))));
-  // Reposition  matrix depending on width & height of the grid
+  //Reposition  matrix depending on width & height of the grid
   //translate(-(str.length-1)*tracking/2,0);
   for(var i = 0; i < str.length; i++){
 
@@ -293,6 +286,19 @@ function textHeight(text, maxWidth) {
   return h;
 }
 
+function drawBackground(){
+  c1 = color(24,87,182);
+  c2 = color(255, 214, 184);
+  
+  /////Background Gradient!////
+  for(let y=0; y<height; y++){
+    n = map(y,0,height,0,1);
+    let newc = lerpColor(c1,c2,n);
+    stroke(newc);
+    line(0,y,width, y);
+  }
+}
+
 class DataPoint {
     constructor(angle, distance, name, url, centerX, centerY, scalar, description, radius) {
         this.angle = angle;
@@ -312,14 +318,21 @@ class DataPoint {
     drawDataPoint(){
       push();
         shadow();
-        Math.max()
-        var x = this.centerX + cos(radians(this.angle)) * this.scalar * this.distance;
-        var y = this.centerY + sin(radians(this.angle)) * this.scalar * this.distance;
+        
+        //var x = this.centerX + cos(radians(this.angle)) * this.scalar * this.distance;
+        //var y = this.centerY + sin(radians(this.angle)) * this.scalar * this.distance;
+        //var c = Math.sqrt(Math.pow(x-this.centerX,2) + Math.pow(y - this.centerY,2));
+        translate(this.centerX,this.centerY);
+        rotate(radians(this.angle));
+        translate(0,this.radius*this.distance);
+
         fill(254, 251, 230)
-        //fill(55, 43, 197);
-        ellipse(x, y, this.dataPointRadius, this.dataPointRadius);
+        //ellipse(x, y, this.dataPointRadius, this.dataPointRadius);
+        ellipse(0, 0, this.dataPointRadius, this.dataPointRadius);
         textStyle(BOLD);
-        text(this.name, x + this.textXOffset, y + this.textYOffset);
+        //text(this.name, x + this.textXOffset, y + this.textYOffset);
+        rotate(radians(-this.angle));
+        text(this.name, this.textXOffset, this.textYOffset);
       pop();
     }
     // Check if mouse is over the data point
@@ -332,5 +345,8 @@ class DataPoint {
 }
 
 function windowResized() {
+  console.log("Resize!");
+  clear();
+  drawBackground();
   setup();
 }

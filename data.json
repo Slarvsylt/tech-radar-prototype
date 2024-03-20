@@ -14,37 +14,37 @@
     {
         "name": "Jeppson",
         "distance": 0.5,
-        "angle": 300,
+        "angle": 180,
         "description" : "Jeppson premiered in 1997 to mostly positive audience reactions."
     },
     {
         "name": "Web4",
-        "distance": 0.95,
-        "angle": 250,
+        "distance": 1.0,
+        "angle": 170,
         "description" : "Future"
     },
     {
         "name": "Jeeper",
         "distance": 0.8,
-        "angle": 270,
+        "angle": 255,
         "description" : "Once a small boy, Jeeper is now a small man."
     },
     {
         "name": "VR",
         "distance": 0.6,
-        "angle": 220,
+        "angle": 130,
         "description" : "VR will probably be used in some capacity somtime, maybe. VR will probably be used in some capacity somtime, maybe. VR will probably be used in some capacity somtime, maybe. VR will probably be used in some capacity somtime, maybe."
     },
     {
         "name": "AR",
         "distance": 0.7,
-        "angle": 230,
+        "angle": 150,
         "description" : "AR will probably be used in some capacity somtime, maybe."
     },
     {
         "name": "SR",
         "distance": 0.8,
-        "angle": 200,
+        "angle": 120,
         "description" : "SR will probably be used in some capacity somtime, maybe."
     }
 ]
